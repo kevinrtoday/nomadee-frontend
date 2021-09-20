@@ -2,17 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Container } from "@material-ui/core";
 import EventCard from "../components/EventCard";
 import Masonry from "react-masonry-css";
+import axios from "axios";
 export default function Events() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/events/")
-      .then((res) => res.json())
-      .then((data) => setEvents(data));
+    getEvents();
   }, []);
 
+  const getEvents = async () => {
+    const response = await axios.get("http://localhost:5000/api/events/");
+    setEvents(response.data);
+    console.log(response);
+    console.log(events);
+  };
+
   const handleDelete = async (id) => {
-    await fetch("http://localhost:8000/events/" + id, {
+    await fetch("http://localhost:5000/events/" + id, {
       method: "DELETE",
     });
 

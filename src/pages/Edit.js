@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Create() {
+export default function Edit() {
   const classes = useStyles();
   const history = useHistory();
   const [title, SetTitle] = useState("");
@@ -63,7 +63,7 @@ export default function Create() {
     }
 
     if (title && details && city && location && date) {
-      fetch("http://localhost:8000/events", {
+      fetch("http://localhost:3000/events", {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({ title, city, date, location, details, host }),
@@ -79,7 +79,7 @@ export default function Create() {
         gutterBottom
         color="textSecondary"
       >
-        Host a New Event
+        Edit Event
       </Typography>
 
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -165,7 +165,7 @@ export default function Create() {
           variant="contained"
           endIcon={<KeyboardArrowRightIcon />}
         >
-          Submit
+          Re-Submit
         </Button>
       </form>
     </Container>

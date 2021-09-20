@@ -17,6 +17,7 @@ import {
   InfoOutlined,
   ExitToAppOutlined,
 } from "@material-ui/icons";
+import { blue } from "@material-ui/core/colors";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => {
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => {
     },
     title: {
       padding: theme.spacing(2),
+      margin: 2,
     },
     appbar: {
       width: `calc(100% - ${drawerWidth}px)`,
@@ -50,6 +52,12 @@ const useStyles = makeStyles((theme) => {
     },
     avatar: {
       marginLeft: theme.spacing(2),
+    },
+    image: {
+      flex: 1,
+      width: 50,
+      height: 50,
+      resizeMode: "contain",
     },
   };
 });
@@ -103,7 +111,7 @@ export default function Layout({ children }) {
         anchor="left"
       >
         <div>
-          <Typography variant="h5" className={classes.title}>
+          <Typography variant="h5" className={classes.title} color="secondary">
             Nomadee
           </Typography>
         </div>

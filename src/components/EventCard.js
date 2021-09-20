@@ -4,6 +4,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import { Avatar, IconButton, makeStyles, Typography } from "@material-ui/core";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
+import EditOutlined from "@material-ui/icons/EditOutlined";
 import { blue, green, yellow } from "@material-ui/core/colors";
 
 const useStyles = makeStyles({
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function EventCard({ event, handleDelete }) {
+export default function EventCard({ event, handleDelete, handleEdit }) {
   const classes = useStyles(event);
   return (
     <div>
@@ -45,8 +46,13 @@ export default function EventCard({ event, handleDelete }) {
               <DeleteOutlined />
             </IconButton>
           }
+          edit={
+            <IconButton onClick={() => handleEdit(event.id)}>
+              <EditOutlined />
+            </IconButton>
+          }
           title={event.title}
-          subheader={event.date}
+          subheader={new Date(event.date).toLocaleDateString()}
         />
         <CardContent>
           <Typography className={classes.cardcity}>{event.city} </Typography>

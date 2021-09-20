@@ -10,6 +10,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles({
   field: {
@@ -20,55 +21,50 @@ const useStyles = makeStyles({
 });
 
 export default function Create() {
+  const [event, setEvent] = useState({
+    title: "",
+    city: "",
+    location: "",
+    date: "",
+    details: "",
+    host: "",
+  });
   const classes = useStyles();
   const history = useHistory();
-  const [title, SetTitle] = useState("");
-  const [details, SetDetails] = useState("");
-  const [location, SetLocation] = useState("");
-  const [city, SetCity] = useState("");
-  const [date, SetDate] = useState("");
-  const [host, SetHost] = useState("Member");
+  // const [title, SetTitle] = useState("");
+  // const [details, SetDetails] = useState("");
+  // const [location, SetLocation] = useState("");
+  // const [city, SetCity] = useState("");
+  // const [date, SetDate] = useState("");
+  // const [host, SetHost] = useState("Member");
   const [titleError, SetTitleError] = useState(false);
   const [dateError, SetDateError] = useState(false);
   const [detailsError, SetDetailsError] = useState(false);
   const [cityError, SetCityError] = useState(false);
   const [locationError, SetLocationError] = useState(false);
 
+  const handleChange = (e) => {
+    setEvent({
+      ...event,
+      [e.target.name]: e.target.value,
+    });
+    console.log(`
+      name: ${event.title},
+      city: ${event.city},
+      date: ${event.date},
+      location: ${event.location},
+      detail: ${event.detail},
+      host: ${event.host},
+    `);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    SetTitleError(false);
-    SetDetailsError(false);
-    SetLocationError(false);
-    SetCityError(false);
-    SetDateError(false);
-
-    if (title == "") {
-      SetTitleError(true);
-    }
-
-    if (details == "") {
-      SetDetailsError(true);
-    }
-
-    if (location == "") {
-      SetLocationError(true);
-    }
-
-    if (city == "") {
-      SetCityError(true);
-    }
-
-    if (date == "") {
-      SetDateError(true);
-    }
-
-    if (title && details && city && location && date) {
-      fetch("http://localhost:3000/events", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ title, city, date, location, details, host }),
-      }).then(() => history.push("/"));
-    }
+    axios.post(`http://localhost:5000/api/events/event`, event);
+    /*
+      - set the POST with axios inside of this function
+        * use my react repo as referece
+    */
   };
 
   return (
@@ -84,7 +80,9 @@ export default function Create() {
 
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
         <TextField
-          onChange={(e) => SetTitle(e.target.value)}
+          name="title"
+          value={event.title}
+          onChange={handleChange}
           className={classes.field}
           label="Event Title"
           variant="outlined"
@@ -95,7 +93,9 @@ export default function Create() {
         />
 
         <TextField
-          onChange={(e) => SetCity(e.target.value)}
+          onChange={handleChange}
+          value={event.city}
+          name="city"
           className={classes.field}
           label="City"
           variant="outlined"
@@ -106,9 +106,11 @@ export default function Create() {
         />
 
         <TextField
-          onChange={(e) => SetDate(e.target.value)}
+          onChange={handleChange}
+          value={event.date}
+          name="date"
+          type="date"
           className={classes.field}
-          label="Date"
           variant="outlined"
           color="secondary"
           fullWidth
@@ -117,7 +119,9 @@ export default function Create() {
         />
 
         <TextField
-          onChange={(e) => SetLocation(e.target.value)}
+          onChange={handleChange}
+          value={event.location}
+          name="location"
           className={classes.field}
           label="Location"
           variant="outlined"
@@ -128,7 +132,9 @@ export default function Create() {
         />
 
         <TextField
-          onChange={(e) => SetDetails(e.target.value)}
+          onChange={handleChange}
+          value={event.details}
+          name="details"
           className={classes.field}
           label="Details"
           variant="outlined"
@@ -142,15 +148,25 @@ export default function Create() {
 
         <FormLabel>Event Host</FormLabel>
         <FormControl className={classes.field}>
-          <RadioGroup value={host} onChange={(e) => SetHost(e.target.value)}>
+          <RadioGroup onSelect={handleChange}>
             <FormControlLabel
+              onChange={handleChange}
+              name="host"
               value="Member"
               control={<Radio />}
               label="Member"
             />
 
-            <FormControlLabel value="Guest" control={<Radio />} label="Guest" />
             <FormControlLabel
+              value="Guest"
+              control={<Radio />}
+              label="Guest"
+              onChange={handleChange}
+              name="host"
+            />
+            <FormControlLabel
+              onChange={handleChange}
+              name="host"
               value="Business"
               control={<Radio />}
               label="Business"
@@ -159,7 +175,7 @@ export default function Create() {
         </FormControl>
 
         <Button
-          onClick={() => console.log("you clicked me")}
+          onClick={handleSubmit}
           type="submit"
           color="secondary"
           variant="contained"
